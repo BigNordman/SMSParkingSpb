@@ -133,7 +133,7 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:onClick="qClick"
-        android:visibility="visible" />
+        android:visibility="invisible" />
 
 
 </LinearLayout>

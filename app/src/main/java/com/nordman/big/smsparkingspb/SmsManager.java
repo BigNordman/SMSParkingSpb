@@ -46,14 +46,14 @@ public class SmsManager{
     }
 
     public void updateSms() {
-        sms = "p66*";
+        sms = "";
 
         if (currentZone==null) {
             sms += "*";
         } else {
             sms += currentZone.getZoneNumber().toString() + "*";
         }
-        sms += regNum + "*" + hours;
+        sms += regNum.toUpperCase() + "*" + hours + "*B";
     }
 
     public int getProgress(){
