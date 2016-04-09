@@ -127,7 +127,7 @@ public class ParkingActivity extends Activity {
     public void stopParkingButtonOnClick(View view) {
         Uri uri = Uri.parse("smsto:" + getResources().getString(R.string.smsNumber));
         Intent it = new Intent(Intent.ACTION_SENDTO, uri);
-        it.putExtra("sms_body", "p66*c");
+        it.putExtra("sms_body", "S");
         startActivity(it);
 
         smsMgr.appStatus = SmsManager.STATUS_WAITING_OUT;
