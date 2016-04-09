@@ -1,0 +1,126 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background_2"
+    android:weightSum="1">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Номер парковки"
+        android:id="@+id/parkNumLabel"
+        android:textAlignment="center"
+        android:layout_marginTop="60dp" />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_marginTop="20dp"
+        android:layout_height="53dp"
+        android:gravity="center_horizontal">
+
+        <ImageView
+            android:layout_width="64dp"
+            android:layout_height="match_parent"
+            android:id="@+id/imageView2"
+            android:src="@drawable/icon_parking" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="60dp"
+            android:id="@+id/parkNumText"
+            android:textSize="35sp"
+            android:textAlignment="center"
+            android:textCursorDrawable="@null"
+            android:textColor="@color/colorMaterialGrey"
+            android:focusable="false" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Определить&#10; по GPS"
+            android:id="@+id/buttonGPS"
+            android:enabled="false"
+            android:background="@drawable/button_customize"
+            android:textColor="#FFFFFF"
+            android:textSize="20sp"
+            android:padding="8dp"
+            android:layout_margin="5dp"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Выбрать из&#10; списка"
+            android:id="@+id/buttonList"
+            android:background="@drawable/button_customize"
+            android:textColor="#FFFFFF"
+            android:textSize="20sp"
+            android:padding="8dp"
+            android:layout_margin="5dp"/>
+    </LinearLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/zoneDesc"
+        android:text=""
+        android:textSize="16sp"
+        android:textAlignment="center"
+        android:textCursorDrawable="@null"
+        android:focusable="false"
+        android:layout_weight="0.05" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Время"
+        android:id="@+id/timeLabel"
+        android:textAlignment="center"
+        android:layout_gravity="bottom"
+        android:layout_marginTop="40dp"/>
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:layout_marginTop="20dp">
+        <Button
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:text="-"
+            android:id="@+id/buttonMinus"
+            android:background="@drawable/button_customize"
+            android:textColor="#FFFFFF"
+            android:textSize="30sp"/>
+        <EditText
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/hourText"
+            android:text="1 час"
+            android:textSize="25sp"
+            android:textAlignment="center"
+            android:textCursorDrawable="@null"
+            android:textColor="@color/colorMaterialGrey"
+            android:focusable="false" />
+        <Button
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:text="+"
+            android:id="@+id/buttonPlus"
+            android:background="@drawable/button_customize"
+            android:textColor="#FFFFFF"
+            android:textSize="30sp"/>
+
+    </LinearLayout>
+
+
+</LinearLayout>
