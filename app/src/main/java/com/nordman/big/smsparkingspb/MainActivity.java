@@ -1,10 +1,14 @@
 package com.nordman.big.smsparkingspb;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.Message;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 
@@ -34,6 +38,7 @@ import java.util.TimerTask;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static final int MY_PERMISSIONS_REQUEST_READ_SMS = 1;
     static final int PAGE_COUNT = 3;
     public static final long TICK_INTERVAL = 1000;
     public static final long MAX_TICK_WAITING = 60;
@@ -278,6 +283,11 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 MainActivity mainActivity = (MainActivity)getActivity();
+
+                if (ContextCompat.checkSelfPermission(mainActivity, Manifest.permission.READ_SMS) != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(mainActivity, new String[]{Manifest.permission.READ_SMS},  MY_PERMISSIONS_REQUEST_READ_SMS);
+                }
+
                 SmsManager smsMgr = mainActivity.smsMgr;
                 smsMgr.updateSms();
                 Log.d("LOG", "sms = " + smsMgr.sms);
@@ -517,6 +527,12 @@ public class MainActivity extends AppCompatActivity {
                             ((TextView) this.findViewById(R.id.statusMessage)).setText(getResources().getString(R.string.incomingSmsFailed));
                             ((TextView) this.findViewById(R.id.statusMessage)).setTextColor(Color.RED);
                             break;
+                        case SmsManager.STATUS_SMS_PERMISSION_NOT_GRANTED:
+                            Log.d("LOG", "permission not granted...");
+                            findViewById(R.id.progressBar).setVisibility(View.INVISIBLE);
+                            ((TextView) this.findViewById(R.id.statusMessage)).setText(getResources().getString(R.string.permissionNotGranted));
+                            ((TextView) this.findViewById(R.id.statusMessage)).setTextColor(Color.RED);
+                            break;
                     }
                     break;
             }
@@ -634,6 +650,22 @@ public class MainActivity extends AppCompatActivity {
         smsMgr.appStatus = SmsManager.STATUS_PARKING;
         smsMgr.saveState();
         smsMgr.startParking();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case MY_PERMISSIONS_REQUEST_READ_SMS: {
+                // If request is cancelled, the result arrays are empty.
+                if (!(grantResults.length > 0  && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                    smsMgr.appStatus = SmsManager.STATUS_SMS_PERMISSION_NOT_GRANTED;
+                    smsMgr.saveState();
+                    Log.d("LOG",".......permission not granted");
+                }
+            }
+        }
     }
 
 }

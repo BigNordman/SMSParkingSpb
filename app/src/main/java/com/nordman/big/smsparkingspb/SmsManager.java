@@ -1,12 +1,16 @@
 package com.nordman.big.smsparkingspb;
 
+import android.Manifest;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.preference.PreferenceManager;
+import android.support.v4.content.ContextCompat;
+import android.util.Log;
 
 import java.util.Date;
 
@@ -25,6 +29,7 @@ public class SmsManager{
     public static final int STATUS_SMS_NOT_SENT = 5;
     public static final int STATUS_SMS_NOT_RECEIVED = 6;
     public static final int STATUS_PARKING = 7;
+    public static final int STATUS_SMS_PERMISSION_NOT_GRANTED = 8;
     int appStatus = STATUS_INITIAL;
 
     Context context;
@@ -80,6 +85,11 @@ public class SmsManager{
     public boolean IsSent(String toWhom){
         boolean result = false;
 
+        if (ContextCompat.checkSelfPermission(context, Manifest.permission.READ_SMS) != PackageManager.PERMISSION_GRANTED) {
+            Log.d("LOG","... permission problems");
+            return false;
+        }
+
         ContentResolver cr = context.getContentResolver();
 
         Cursor c = cr.query(Uri.parse("content://sms/sent"),
@@ -108,6 +118,11 @@ public class SmsManager{
 
     public String GetIncomingSms(String fromWhom){
         String result = null;
+
+        if (ContextCompat.checkSelfPermission(context, Manifest.permission.READ_SMS) != PackageManager.PERMISSION_GRANTED) {
+            Log.d("LOG","... permission problems");
+            return context.getResources().getString(R.string.permissionNotGranted);
+        }
 
         ContentResolver cr = context.getContentResolver();
         Cursor c = cr.query(Uri.parse("content://sms/inbox"),
