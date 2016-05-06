@@ -53,37 +53,70 @@
         android:layout_weight="95"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="wrap_content"
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal|center_vertical"
-        android:layout_weight="5"
-        >
+        android:orientation="horizontal" >
 
-        <RadioButton
+        <LinearLayout
+            android:orientation="horizontal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/radioButton1"
-            android:layout_gravity="center_horizontal"
-            android:checked="true"
-            android:buttonTint="@color/colorPrimary"
+            android:layout_centerInParent="true"
+            android:layout_weight="5"
+            >
+
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/radioButton1"
+                android:layout_gravity="center_horizontal"
+                android:checked="true"
+                android:buttonTint="@color/colorPrimary"
+                android:enabled="false"
+                android:focusable="false"/>
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/radioButton2"
+                android:buttonTint="@color/colorPrimary"
+                android:enabled="false"
+                android:focusable="false"/>
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/radioButton3"
+                android:buttonTint="@color/colorPrimary"
+                android:enabled="false"
+                android:focusable="false" />
+        </LinearLayout>
+
+        <Button
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:text="&lt;"
+            android:id="@+id/buttonLeft"
+            android:background="@drawable/button_customize"
+            android:textColor="#FFFFFF"
+            android:textSize="15sp"
+            android:layout_margin="5dp"
+            android:layout_alignParentLeft="true"
             android:enabled="false"
-            android:focusable="false"/>
-        <RadioButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/radioButton2"
-            android:buttonTint="@color/colorPrimary"
-            android:enabled="false"
-            android:focusable="false"/>
-        <RadioButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/radioButton3"
-            android:buttonTint="@color/colorPrimary"
-            android:enabled="false"
-            android:focusable="false" />
-    </LinearLayout>
+            android:onClick="leftSlide"/>
+
+        <Button
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:text="&gt;"
+            android:id="@+id/buttonRight"
+            android:background="@drawable/button_customize"
+            android:textColor="#FFFFFF"
+            android:textSize="15sp"
+            android:layout_margin="5dp"
+            android:layout_alignParentRight="true"
+            android:enabled="true"
+            android:onClick="rightSlide"/>
+
+    </RelativeLayout>
 
 </LinearLayout>
