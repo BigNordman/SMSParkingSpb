@@ -15,8 +15,8 @@ android {
         applicationId "com.nordman.big.smsparkingspb"
         minSdkVersion 14
         targetSdkVersion 23
-        versionCode 5
-        versionName "1.05"
+        versionCode 6
+        versionName "1.06"
     }
     buildTypes {
         release {
@@ -38,8 +38,6 @@ dependencies {
     compile 'com.android.support:design:23.2.1'
     compile 'com.android.support:support-v4:23.2.1'
     compile 'com.google.android.gms:play-services-ads:8.4.0'
-    compile 'com.google.android.gms:play-services-auth:8.4.0'
-    compile 'com.google.android.gms:play-services-location:8.4.0'
 }
 
 apply plugin: 'com.google.gms.google-services'

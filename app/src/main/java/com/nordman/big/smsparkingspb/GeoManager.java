@@ -4,21 +4,17 @@
  */
 
 package com.nordman.big.smsparkingspb;
-
 import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.location.Criteria;
 import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationServices;
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.GeometryFactory;
 import com.vividsolutions.jts.geom.Point;
@@ -31,27 +27,53 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 
-public class GeoManager implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, com.google.android.gms.location.LocationListener {
-    public static final long UPDATE_INTERVAL_IN_MILLISECONDS = 5000;
-    public static final long FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS = UPDATE_INTERVAL_IN_MILLISECONDS / 5;
-
+public class GeoManager {
     private Location curLocation;
     Boolean connected = false;
     Context context;
     GeometryFactory factory;
-    private GoogleApiClient mGoogleApiClient;
-    private LocationRequest mLocationRequest;
-    private int gpsMeasuresNum = 0;
 
     public GeoManager(Context context) {
         this.context = context;
-        if (mGoogleApiClient == null) {
-            mGoogleApiClient = new GoogleApiClient.Builder(this.context)
-                    .addConnectionCallbacks(this)
-                    .addOnConnectionFailedListener(this)
-                    .addApi(LocationServices.API)
-                    .build();
-            mGoogleApiClient.connect();
+        LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+        Criteria crta = new Criteria();
+        crta.setAccuracy(Criteria.ACCURACY_FINE);
+        crta.setAltitudeRequired(false);
+        crta.setBearingRequired(false);
+        crta.setCostAllowed(true);
+        crta.setPowerRequirement(Criteria.POWER_LOW);
+        String gpsProvider = locationManager.getBestProvider(crta, true);
+        Log.d("LOG","...Provider = " + gpsProvider + "...");
+
+        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED || ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            curLocation = locationManager.getLastKnownLocation(gpsProvider);
+
+            LocationListener locationListener = new LocationListener() {
+
+                @Override
+                public void onLocationChanged(Location location) {
+                    curLocation = location;
+                }
+
+                @Override
+                public void onProviderDisabled(String provider) {
+            /*
+            criticalErr = "Provider " + provider + " disabled.";
+            updateUI();
+            */
+                    //TODO: что-то сделать с ошибками
+                }
+
+                @Override
+                public void onProviderEnabled(String provider) {
+                }
+
+                @Override
+                public void onStatusChanged(String provider, int status, Bundle extras) {
+                }
+
+            };
+            locationManager.requestLocationUpdates(gpsProvider, 1000, 0, locationListener);
         }
 
         factory = new GeometryFactory();
@@ -69,6 +91,8 @@ public class GeoManager implements GoogleApiClient.ConnectionCallbacks, GoogleAp
         if (curLocation != null) {
             result = factory.createPoint(new Coordinate(curLocation.getLatitude(),curLocation.getLongitude()));
         }
+
+        //result = factory.createPoint(new Coordinate(55.749644,37.599726));
         return result;
     }
 
@@ -151,7 +175,7 @@ public class GeoManager implements GoogleApiClient.ConnectionCallbacks, GoogleAp
         ArrayList<ParkZone> zones = this.getParkZoneList();
 
         for(ParkZone zone : zones){
-            if (zone.getZoneNumber()==zoneNumber){
+            if (zone.getZoneNumber() == zoneNumber){
                 return zone;
             }
         }
@@ -159,57 +183,4 @@ public class GeoManager implements GoogleApiClient.ConnectionCallbacks, GoogleAp
         return null;
     }
 
-    @Override
-    public void onConnected(@Nullable Bundle bundle) {
-        Log.d("LOG", "...GoogleApiClient - onConnected...");
-        if (mLocationRequest == null) {
-            createLocationRequest();
-        }
-    }
-
-    protected void createLocationRequest() {
-        mLocationRequest = new LocationRequest();
-        mLocationRequest.setInterval(UPDATE_INTERVAL_IN_MILLISECONDS);
-        mLocationRequest.setFastestInterval(FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS);
-        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-
-        locationUpdate();
-    }
-
-    public void locationUpdate() {
-        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED || ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
-        }
-    }
-
-    public void disconnect(){
-        if (mGoogleApiClient.isConnected()) {
-            Log.d("LOG","...disconnect()");
-            mGoogleApiClient.disconnect();
-        }
-    }
-
-    @Override
-    public void onConnectionSuspended(int i) {
-        Log.d("LOG", "...GoogleApiClient - onConnectionSuspended...");
-    }
-
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        Log.d("LOG", "...GoogleApiClient - onConnectionFailed...");
-    }
-
-    @Override
-    public void onLocationChanged(Location location) {
-        Log.d("LOG", "...onConnectionChanged...");
-        gpsMeasuresNum++;
-
-
-        if(gpsMeasuresNum >= 3) {
-            LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
-            gpsMeasuresNum = 0;
-        }
-
-        curLocation = location;
-    }
 }
