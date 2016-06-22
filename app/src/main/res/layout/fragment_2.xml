@@ -31,7 +31,7 @@
             android:layout_width="wrap_content"
             android:layout_height="60dp"
             android:id="@+id/parkNumText"
-            android:textSize="35sp"
+            android:textSize="35dp"
             android:textAlignment="center"
             android:textCursorDrawable="@null"
             android:textColor="@color/colorMaterialGrey"
@@ -52,7 +52,7 @@
             android:enabled="false"
             android:background="@drawable/button_customize"
             android:textColor="#FFFFFF"
-            android:textSize="20sp"
+            android:textSize="20dp"
             android:padding="8dp"
             android:layout_margin="5dp"/>
 
@@ -63,7 +63,7 @@
             android:id="@+id/buttonList"
             android:background="@drawable/button_customize"
             android:textColor="#FFFFFF"
-            android:textSize="20sp"
+            android:textSize="20dp"
             android:padding="8dp"
             android:layout_margin="5dp"/>
     </LinearLayout>
@@ -100,13 +100,13 @@
             android:id="@+id/buttonMinus"
             android:background="@drawable/button_customize"
             android:textColor="#FFFFFF"
-            android:textSize="30sp"/>
+            android:textSize="30dp"/>
         <EditText
             android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:id="@+id/hourText"
             android:text="1 час"
-            android:textSize="25sp"
+            android:textSize="25dp"
             android:textAlignment="center"
             android:textCursorDrawable="@null"
             android:textColor="@color/colorMaterialGrey"
@@ -118,7 +118,7 @@
             android:id="@+id/buttonPlus"
             android:background="@drawable/button_customize"
             android:textColor="#FFFFFF"
-            android:textSize="30sp"/>
+            android:textSize="30dp"/>
 
     </LinearLayout>
 
