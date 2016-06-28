@@ -21,7 +21,7 @@ import android.widget.TextView;
 public class AppRater {
     private final static String APP_PNAME = "com.nordman.big.smsparkingspb";
 
-    private final static int DAYS_UNTIL_PROMPT = 0;
+    private final static int DAYS_UNTIL_PROMPT = 3;
     private final static int LAUNCHES_UNTIL_PROMPT = 7;
 
     public static void app_launched(Context mContext) {
