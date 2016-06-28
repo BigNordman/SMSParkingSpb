@@ -56,6 +56,10 @@ public class ParkingActivity extends Activity {
         */
 
         mAdView.loadAd(adRequest);
+
+        //AppRater.showRateDialog(this, null);
+        AppRater.app_launched(this);
+
     }
 
     protected void onResume() {
