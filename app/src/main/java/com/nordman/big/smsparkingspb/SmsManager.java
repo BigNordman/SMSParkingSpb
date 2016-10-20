@@ -191,6 +191,7 @@ public class SmsManager{
         ed.putLong("sendDate", sendDate != null ? sendDate.getTime() : 0);
         ed.putLong("startParkingDate", startParkingDate != null ? startParkingDate.getTime() : 0);
         ed.putInt("zoneNumber", currentZone != null ? currentZone.getZoneNumber() : 0);
+        ed.putString("hours", hours);
         ed.apply();
         //Log.d("LOG", "...saveState()...");
     }
@@ -203,6 +204,7 @@ public class SmsManager{
         startParkingDate = new Date(prefs.getLong("startParkingDate",0));
         //if (appStatus==STATUS_WAITING_IN || appStatus==STATUS_WAITING_OUT)
         currentZone = geoMgr.getParkZone(prefs.getInt("zoneNumber", 0));
+        hours = prefs.getString("hours", "1");
         //Log.d("LOG", "...restoreState()...");
     }
 }
