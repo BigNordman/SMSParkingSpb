@@ -27,13 +27,13 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 
-public class GeoManager {
+class GeoManager {
     private Location curLocation;
     Boolean connected = false;
-    Context context;
-    GeometryFactory factory;
+    private Context context;
+    private GeometryFactory factory;
 
-    public GeoManager(Context context) {
+    GeoManager(Context context) {
         this.context = context;
         LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
         Criteria crta = new Criteria();
@@ -79,7 +79,7 @@ public class GeoManager {
         factory = new GeometryFactory();
     }
 
-    public String getCoordinates() {
+    String getCoordinates() {
         Point currentPoint = this.getCurrentPoint();
         if (currentPoint!=null) return currentPoint.toString();
         else return "";
@@ -96,7 +96,7 @@ public class GeoManager {
         return result;
     }
 
-    public ArrayList<ParkZone> getParkZoneList(){
+    ArrayList<ParkZone> getParkZoneList(){
         ArrayList<ParkZone> result = new ArrayList<>();
         ArrayList<Coordinate> coords = null;
         Polygon polygon;
@@ -156,7 +156,7 @@ public class GeoManager {
     }
 
 
-    public ParkZone getParkZone(){
+    ParkZone getParkZone(){
         ArrayList<ParkZone> zones = this.getParkZoneList();
         Point currentPoint = this.getCurrentPoint();
 
@@ -171,7 +171,7 @@ public class GeoManager {
         return null;
     }
 
-    public ParkZone getParkZone(int zoneNumber){
+    ParkZone getParkZone(int zoneNumber){
         ArrayList<ParkZone> zones = this.getParkZoneList();
 
         for(ParkZone zone : zones){

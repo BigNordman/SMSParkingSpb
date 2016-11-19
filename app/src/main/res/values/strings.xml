@@ -26,4 +26,10 @@
     <string name="remind_later">Напомнить позже</string>
     <string name="no_thanks">Нет, спасибо!</string>
 
+    <string name="one_hour">%1$s час</string>
+    <string name="two_hours">%1$s часа</string>
+    <string name="five_hours">%1$s часов</string>
+
+    <string name="parking_from">ПАРКОВКА С %1$s</string>
+
 </resources>

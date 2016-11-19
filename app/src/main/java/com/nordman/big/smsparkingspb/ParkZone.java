@@ -4,29 +4,30 @@ import com.vividsolutions.jts.geom.Polygon;
 
 /**
  * Created by s_vershinin on 11.01.2016.
+ *
  */
-public class ParkZone {
+class ParkZone {
     private Integer zoneNumber;
     private String zoneDesc;
     private Polygon zonePolygon;
 
-    public ParkZone(Polygon zonePolygon, Integer zoneNumber, String zoneDesc) {
+    ParkZone(Polygon zonePolygon, Integer zoneNumber, String zoneDesc) {
         this.zonePolygon = zonePolygon;
         this.zoneNumber = zoneNumber;
         this.zoneDesc = zoneDesc;
     }
 
-    public Polygon getZonePolygon() {
+    Polygon getZonePolygon() {
         return zonePolygon;
     }
 
-    public String getZoneDesc() {
+    String getZoneDesc() {
 
         return zoneDesc;
     }
 
 
-    public Integer getZoneNumber() {
+    Integer getZoneNumber() {
 
         return zoneNumber;
     }

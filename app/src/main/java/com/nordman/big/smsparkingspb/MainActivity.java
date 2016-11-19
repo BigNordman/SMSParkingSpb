@@ -3,6 +3,7 @@ package com.nordman.big.smsparkingspb;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Handler;
@@ -33,6 +34,7 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -62,49 +64,54 @@ public class MainActivity extends AppCompatActivity {
         // primary sections of the activity.
         SectionsPagerAdapter mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
         ViewPager mViewPager = (ViewPager) findViewById(R.id.container);
-        mViewPager.setAdapter(mSectionsPagerAdapter);
+        if (mViewPager != null) {
+            mViewPager.setAdapter(mSectionsPagerAdapter);
 
+            mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
 
-        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+                RadioButton radioButton1 = (RadioButton) findViewById(R.id.radioButton1);
+                RadioButton radioButton2 = (RadioButton) findViewById(R.id.radioButton2);
+                RadioButton radioButton3 = (RadioButton) findViewById(R.id.radioButton3);
+                View buttonLeft = findViewById(R.id.buttonLeft);
+                View buttonRight = findViewById(R.id.buttonRight);
+                @Override
+                public void onPageSelected(int position) {
+                    switch (position) {
+                        case 0:
+                            radioButton1.setChecked(true);
+                            radioButton2.setChecked(false);
+                            radioButton3.setChecked(false);
+                            buttonLeft.setEnabled(false);
+                            buttonRight.setEnabled(true);
 
-            @Override
-            public void onPageSelected(int position) {
-                switch (position) {
-                    case 0:
-                        ((RadioButton) findViewById(R.id.radioButton1)).setChecked(true);
-                        ((RadioButton) findViewById(R.id.radioButton2)).setChecked(false);
-                        ((RadioButton) findViewById(R.id.radioButton3)).setChecked(false);
-                        findViewById(R.id.buttonLeft).setEnabled(false);
-                        findViewById(R.id.buttonRight).setEnabled(true);
-
-                        break;
-                    case 1:
-                        ((RadioButton) findViewById(R.id.radioButton1)).setChecked(false);
-                        ((RadioButton) findViewById(R.id.radioButton2)).setChecked(true);
-                        ((RadioButton) findViewById(R.id.radioButton3)).setChecked(false);
-                        findViewById(R.id.buttonLeft).setEnabled(true);
-                        findViewById(R.id.buttonRight).setEnabled(true);
-                        break;
-                    case 2:
-                        ((RadioButton) findViewById(R.id.radioButton1)).setChecked(false);
-                        ((RadioButton) findViewById(R.id.radioButton2)).setChecked(false);
-                        ((RadioButton) findViewById(R.id.radioButton3)).setChecked(true);
-                        findViewById(R.id.buttonLeft).setEnabled(true);
-                        findViewById(R.id.buttonRight).setEnabled(false);
-                        break;
+                            break;
+                        case 1:
+                            radioButton1.setChecked(false);
+                            radioButton2.setChecked(true);
+                            radioButton3.setChecked(false);
+                            buttonLeft.setEnabled(true);
+                            buttonRight.setEnabled(true);
+                            break;
+                        case 2:
+                            radioButton1.setChecked(false);
+                            radioButton2.setChecked(false);
+                            radioButton3.setChecked(true);
+                            buttonLeft.setEnabled(true);
+                            buttonRight.setEnabled(false);
+                            break;
+                    }
                 }
-            }
 
-            @Override
-            public void onPageScrolled(int position, float positionOffset,
-                                       int positionOffsetPixels) {
-            }
+                @Override
+                public void onPageScrolled(int position, float positionOffset,
+                                           int positionOffsetPixels) {
+                }
 
-            @Override
-            public void onPageScrollStateChanged(int state) {
-            }
-        });
-
+                @Override
+                public void onPageScrollStateChanged(int state) {
+                }
+            });
+        }
     }
 
     @Override
@@ -252,21 +259,6 @@ public class MainActivity extends AppCompatActivity {
         private View.OnClickListener buttonGPSListener = new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                /*
-                MainActivity mainActivity = (MainActivity)getActivity();
-                GeoManager geoMgr = mainActivity.geoMgr;
-                SmsManager smsMgr = mainActivity.smsMgr;
-                geoMgr.locationUpdate();
-
-                Log.d("LOG", geoMgr.getCoordinates());
-                Toast.makeText(v.getContext(), geoMgr.getCoordinates(), Toast.LENGTH_LONG).show();
-
-                if ( (smsMgr.appStatus==SmsManager.STATUS_SMS_NOT_SENT) ||(smsMgr.appStatus==SmsManager.STATUS_SMS_NOT_RECEIVED)) smsMgr.appStatus=SmsManager.STATUS_INITIAL;
-
-                smsMgr.currentZone = geoMgr.getParkZone();
-                smsMgr.saveState();
-                mainActivity.updateView();
-                */
                 MainActivity mainActivity = (MainActivity)getActivity();
 
                 if (ContextCompat.checkSelfPermission(mainActivity, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -415,7 +407,7 @@ public class MainActivity extends AppCompatActivity {
      * one of the sections/tabs/pages.
      */
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
-        public SectionsPagerAdapter(FragmentManager fm) {
+        SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
         }
 
@@ -437,6 +429,12 @@ public class MainActivity extends AppCompatActivity {
     private void updateView(){
         smsMgr.restoreState();
         //Log.d("LOG","Статус = " + smsMgr.appStatus);
+
+        Resources res = getResources();
+        View buttonGPS = this.findViewById(R.id.buttonGPS);
+        View progressBar = findViewById(R.id.progressBar);
+        TextView statusMessage = (TextView) this.findViewById(R.id.statusMessage);
+
         for(int i = 0; i < views.size(); i++) {
             int key = views.keyAt(i);
             // get the object by the key.
@@ -469,33 +467,37 @@ public class MainActivity extends AppCompatActivity {
                     }
                     break;
                 case 2:
-                    this.findViewById(R.id.buttonGPS).setEnabled(true);
+                    if (buttonGPS != null) buttonGPS.setEnabled(true);
 
                     TextView zoneDesc = (TextView) this.findViewById(R.id.zoneDesc);
                     if (smsMgr.currentZone != null) {
-                        ((TextView) view.findViewById(R.id.parkNumText)).setText(smsMgr.currentZone.getZoneNumber().toString());
-                        zoneDesc.setText(smsMgr.currentZone.getZoneDesc());
-                        zoneDesc.setTextColor(Color.BLACK);
+                        ((TextView) view.findViewById(R.id.parkNumText)).setText(String.format(Locale.getDefault(), "%d",smsMgr.currentZone.getZoneNumber()));
+                        if (zoneDesc != null ) {
+                            zoneDesc.setText(smsMgr.currentZone.getZoneDesc());
+                            zoneDesc.setTextColor(Color.BLACK);
+                        }
                     } else {
                         ((TextView) view.findViewById(R.id.parkNumText)).setText("");
-                        zoneDesc.setText(R.string.parking_undefined);
-                        zoneDesc.setTextColor(Color.RED);
+                        if (zoneDesc != null ) {
+                            zoneDesc.setText(R.string.parking_undefined);
+                            zoneDesc.setTextColor(Color.RED);
+                        }
                     }
 
                     if (Integer.parseInt(smsMgr.hours) <= 1) {
                         (view.findViewById(R.id.buttonMinus)).setEnabled(false);
-                        ((TextView) view.findViewById(R.id.hourText)).setText(smsMgr.hours + " час");
+                        ((TextView) view.findViewById(R.id.hourText)).setText(String.format(res.getString(R.string.one_hour),smsMgr.hours));
                     } else if (Integer.parseInt(smsMgr.hours) >= 8) {
                         (view.findViewById(R.id.buttonPlus)).setEnabled(false);
-                        ((TextView) view.findViewById(R.id.hourText)).setText(smsMgr.hours + " часов");
+                        ((TextView) view.findViewById(R.id.hourText)).setText(String.format(res.getString(R.string.five_hours),smsMgr.hours));
                     } else if (Integer.parseInt(smsMgr.hours) >= 5) {
                         (view.findViewById(R.id.buttonMinus)).setEnabled(true);
                         (view.findViewById(R.id.buttonPlus)).setEnabled(true);
-                        ((TextView) view.findViewById(R.id.hourText)).setText(smsMgr.hours + " часов");
+                        ((TextView) view.findViewById(R.id.hourText)).setText(String.format(res.getString(R.string.five_hours),smsMgr.hours));
                     } else {
                         (view.findViewById(R.id.buttonMinus)).setEnabled(true);
                         (view.findViewById(R.id.buttonPlus)).setEnabled(true);
-                        ((TextView) view.findViewById(R.id.hourText)).setText(smsMgr.hours + " часа");
+                        ((TextView) view.findViewById(R.id.hourText)).setText(String.format(res.getString(R.string.two_hours),smsMgr.hours));
                     }
                     break;
                 case 3:
@@ -503,7 +505,7 @@ public class MainActivity extends AppCompatActivity {
                     ((TextView) view.findViewById(R.id.regNumText)).setText(smsMgr.regNum);
                     TextView parkNumText =(TextView) view.findViewById(R.id.parkNumText);
                     if (smsMgr.currentZone != null) {
-                        parkNumText.setText(smsMgr.currentZone.getZoneNumber().toString());
+                        parkNumText.setText(String.format(Locale.getDefault(), "%d",smsMgr.currentZone.getZoneNumber()));
                         parkNumText.setTextColor(ContextCompat.getColor(this, R.color.colorMaterialGrey));
 
                     } else {
@@ -513,55 +515,69 @@ public class MainActivity extends AppCompatActivity {
                     }
 
                     if (Integer.parseInt(smsMgr.hours) == 1) {
-                        ((TextView) view.findViewById(R.id.hourText)).setText(smsMgr.hours + " час");
+                        ((TextView) view.findViewById(R.id.hourText)).setText(String.format(res.getString(R.string.one_hour),smsMgr.hours));
                     }
                     else if ((Integer.parseInt(smsMgr.hours) > 1) && (Integer.parseInt(smsMgr.hours) < 5)) {
-                        ((TextView) view.findViewById(R.id.hourText)).setText(smsMgr.hours + " часа");
+                        ((TextView) view.findViewById(R.id.hourText)).setText(String.format(res.getString(R.string.two_hours),smsMgr.hours));
                     } else {
-                        ((TextView) view.findViewById(R.id.hourText)).setText(smsMgr.hours + " часов");
+                        ((TextView) view.findViewById(R.id.hourText)).setText(String.format(res.getString(R.string.five_hours),smsMgr.hours));
                     }
 
                     switch (smsMgr.appStatus) {
                         case SmsManager.STATUS_INITIAL:
-                            findViewById(R.id.progressBar).setVisibility(View.INVISIBLE);
-                            ((TextView) this.findViewById(R.id.statusMessage)).setText(smsMgr.statusMessage);
-                            ((TextView) this.findViewById(R.id.statusMessage)).setTextColor(Color.RED);
+                            if (progressBar != null) progressBar.setVisibility(View.INVISIBLE);
+                            if (statusMessage != null) {
+                                statusMessage.setText(smsMgr.statusMessage);
+                                statusMessage.setTextColor(Color.RED);
+                            }
                             break;
                         case SmsManager.STATUS_WAITING_OUT:
                             Log.d("LOG", "waiting outgoing sms...");
-                            findViewById(R.id.progressBar).setVisibility(View.VISIBLE);
-                            ((TextView) this.findViewById(R.id.statusMessage)).setText(getResources().getString(R.string.outgoingSmsWaiting));
-                            ((TextView) this.findViewById(R.id.statusMessage)).setTextColor(Color.BLACK);
+                            if (progressBar != null) progressBar.setVisibility(View.VISIBLE);
+                            if (statusMessage != null) {
+                                statusMessage.setText(getResources().getString(R.string.outgoingSmsWaiting));
+                                statusMessage.setTextColor(Color.BLACK);
+                            }
                             break;
                         case SmsManager.STATUS_WAITING_IN:
                             Log.d("LOG", "waiting incoming sms...");
-                            findViewById(R.id.progressBar).setVisibility(View.VISIBLE);
-                            ((TextView) this.findViewById(R.id.statusMessage)).setText(getResources().getString(R.string.incomingSmsWaiting));
-                            ((TextView) this.findViewById(R.id.statusMessage)).setTextColor(Color.BLACK);
+                            if (progressBar != null) progressBar.setVisibility(View.VISIBLE);
+                            if (statusMessage != null) {
+                                statusMessage.setText(getResources().getString(R.string.incomingSmsWaiting));
+                                statusMessage.setTextColor(Color.BLACK);
+                            }
                             break;
                         case SmsManager.STATUS_SMS_SENT:
                             Log.d("LOG", "sms was sent...");
-                            findViewById(R.id.progressBar).setVisibility(View.INVISIBLE);
-                            ((TextView) this.findViewById(R.id.statusMessage)).setText(getResources().getString(R.string.sendSmsWaiting));
-                            ((TextView) this.findViewById(R.id.statusMessage)).setTextColor(Color.BLACK);
+                            if (progressBar != null) progressBar.setVisibility(View.INVISIBLE);
+                            if (statusMessage != null) {
+                                statusMessage.setText(getResources().getString(R.string.sendSmsWaiting));
+                                statusMessage.setTextColor(Color.BLACK);
+                            }
                             break;
                         case SmsManager.STATUS_SMS_NOT_SENT:
                             Log.d("LOG", "sms wasn't sent...");
-                            findViewById(R.id.progressBar).setVisibility(View.INVISIBLE);
-                            ((TextView) this.findViewById(R.id.statusMessage)).setText(getResources().getString(R.string.sendSmsFailed));
-                            ((TextView) this.findViewById(R.id.statusMessage)).setTextColor(Color.RED);
+                            if (progressBar != null) progressBar.setVisibility(View.INVISIBLE);
+                            if (statusMessage != null) {
+                                statusMessage.setText(getResources().getString(R.string.sendSmsFailed));
+                                statusMessage.setTextColor(Color.RED);
+                            }
                             break;
                         case SmsManager.STATUS_SMS_NOT_RECEIVED:
                             Log.d("LOG", "sms wasn't received...");
-                            findViewById(R.id.progressBar).setVisibility(View.INVISIBLE);
-                            ((TextView) this.findViewById(R.id.statusMessage)).setText(getResources().getString(R.string.incomingSmsFailed));
-                            ((TextView) this.findViewById(R.id.statusMessage)).setTextColor(Color.RED);
+                            if (progressBar != null) progressBar.setVisibility(View.INVISIBLE);
+                            if (statusMessage != null) {
+                                statusMessage.setText(getResources().getString(R.string.incomingSmsFailed));
+                                statusMessage.setTextColor(Color.RED);
+                            }
                             break;
                         case SmsManager.STATUS_SMS_PERMISSION_NOT_GRANTED:
                             Log.d("LOG", "permission not granted...");
-                            findViewById(R.id.progressBar).setVisibility(View.INVISIBLE);
-                            ((TextView) this.findViewById(R.id.statusMessage)).setText(getResources().getString(R.string.permissionNotGranted));
-                            ((TextView) this.findViewById(R.id.statusMessage)).setTextColor(Color.RED);
+                            if (progressBar != null) progressBar.setVisibility(View.INVISIBLE);
+                            if (statusMessage != null) {
+                                statusMessage.setText(getResources().getString(R.string.permissionNotGranted));
+                                statusMessage.setTextColor(Color.RED);
+                            }
                             break;
                     }
                     break;
@@ -718,7 +734,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void slide(int direction) {
         ViewPager mViewPager = (ViewPager) findViewById(R.id.container);
-        mViewPager.setCurrentItem(mViewPager.getCurrentItem()+direction);
+        if (mViewPager != null) mViewPager.setCurrentItem(mViewPager.getCurrentItem()+direction);
 
     }
 

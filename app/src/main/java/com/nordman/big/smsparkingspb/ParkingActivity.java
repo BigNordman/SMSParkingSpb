@@ -2,6 +2,7 @@ package com.nordman.big.smsparkingspb;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -19,6 +20,7 @@ import com.lylc.widget.circularprogressbar.CircularProgressBar;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -68,8 +70,9 @@ public class ParkingActivity extends Activity {
         if (smsMgr.startParkingDate!=null) {
             Log.d("LOG", "smsMgr.startParkingDate = " + smsMgr.startParkingDate);
 
-            DateFormat df = new SimpleDateFormat("kk:mm");
-            ((TextView) this.findViewById(R.id.timerText)).setText("ПАРКОВКА С " + df.format(smsMgr.startParkingDate));
+            Resources res = getResources();
+            DateFormat df = new SimpleDateFormat("kk:mm", Locale.getDefault());
+            ((TextView) this.findViewById(R.id.timerText)).setText(String.format(res.getString(R.string.parking_from),df.format(smsMgr.startParkingDate)));
 
             Log.d("LOG", "smsMgr.startParkingDate formatted = " + df.format(smsMgr.startParkingDate));
         }

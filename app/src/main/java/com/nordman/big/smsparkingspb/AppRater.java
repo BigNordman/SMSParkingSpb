@@ -18,13 +18,13 @@ import android.widget.TextView;
  * Created by s_vershinin on 28.06.2016.
  * 
  */
-public class AppRater {
+class AppRater {
     private final static String APP_PNAME = "com.nordman.big.smsparkingspb";
 
     private final static int DAYS_UNTIL_PROMPT = 3;
     private final static int LAUNCHES_UNTIL_PROMPT = 7;
 
-    public static void app_launched(Context mContext) {
+    static void app_launched(Context mContext) {
         SharedPreferences prefs = mContext.getSharedPreferences("apprater", 0);
         if (prefs.getBoolean("dontshowagain", false)) { return ; }
 
@@ -52,7 +52,7 @@ public class AppRater {
         editor.apply();
     }
 
-    public static void showRateDialog(final Context mContext, final SharedPreferences.Editor editor) {
+    private static void showRateDialog(final Context mContext, final SharedPreferences.Editor editor) {
         final Dialog dialog = new Dialog(mContext);
         dialog.setTitle(mContext.getString(R.string.rate));
 
