@@ -1,1 +1,4 @@
-include ':app', 'progress_bar'
+include ':app'
+include 'progress_bar'
+include ':common'
+project(':common').projectDir = new File(rootDir,'../SMSParkingLib/common')

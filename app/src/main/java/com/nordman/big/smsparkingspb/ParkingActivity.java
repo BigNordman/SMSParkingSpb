@@ -24,6 +24,7 @@ import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import com.nordman.big.smsparkinglib.AppRater;
 
 public class ParkingActivity extends Activity {
     private static final long TICK_INTERVAL = 5000;

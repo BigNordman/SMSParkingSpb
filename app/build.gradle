@@ -33,11 +33,12 @@ dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile 'junit:junit:4.12'
     compile files('libs/jts-1.13.jar')
-    compile project(':progress_bar')
     compile 'com.android.support:appcompat-v7:23.2.1'
     compile 'com.android.support:design:23.2.1'
     compile 'com.android.support:support-v4:23.2.1'
     compile 'com.google.android.gms:play-services-ads:8.4.0'
+    compile project(':progress_bar')
+    compile project(':common')
 }
 
     apply plugin: 'com.google.gms.google-services'
